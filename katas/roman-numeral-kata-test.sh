@@ -32,6 +32,8 @@ declare -a bad_roman=(
 )
 
 
+ntests=$((${#tests_pass[@]}*2 + ${#bad_arabic[@]} + ${#bad_roman[@]}))
+
 function do_passing_test() {
     local arabic=$1
     local roman=$2
@@ -75,6 +77,7 @@ function do_failing_bad_roman_test() {
 }
 
 
+printf "1..%d\n" ${ntests}
 for t in "${tests_pass[@]}";
 do
     do_passing_test ${t% *} ${t#* }
