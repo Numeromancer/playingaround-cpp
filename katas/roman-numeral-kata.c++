@@ -15,6 +15,20 @@ using namespace std::literals;
 // So the largest is MMMCMXCIX
 constexpr int MaxRomanNumeral = 3000 + 900 + 90 + 9;
 
+// For coverting Roman to & from arabic, I use an intermidiary synax where
+// there are only I, X, C and M repeated. This syntax is more regular (I don't
+// mean that in the strict sense. I probably is, but I haven't verified it),
+// and easier to convert to and from. I then collapse this syntax into the
+// usual one.
+// 
+// We don't actually deal with arabic form directly, of course; we just use an
+// integer and let the standard formatters do the work when we output.
+
+
+// Collapse the intermediary syntax into the common form.
+//
+// Don't need a regex here, but std::string doesn't have the kind of replace
+// function I need.
 static auto
 collapse(const string & s) {
     string ret = s;
@@ -48,6 +62,8 @@ expand(const string & s) {
 }
 
 
+// Convert an integer into a string with the intermediary Roman numeral syntax
+// described above.
 static auto
 convert(unsigned int n) {
     if (n > MaxRomanNumeral) {
@@ -70,6 +86,7 @@ const map<char, unsigned int> RNValue = {
     { 'I', 1 }, { 'X', 10 }, { 'C', 100 }, { 'M', 1000 }
 };
 
+// Convert from intermediary syntax to unsigned int.
 static auto
 unconvert(string s) {
     unsigned int n = 0;
