@@ -105,10 +105,7 @@ unconvert(string s) {
 static string
 upcase(const string & s) {
     string ret;
-    transform(begin(s), end(s), back_inserter(ret),
-        [](const char c) {
-            return ::toupper(c);
-        });
+    transform(begin(s), end(s), back_inserter(ret), ::toupper);
     return ret;
 }
 
