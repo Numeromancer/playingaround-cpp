@@ -85,6 +85,15 @@ unconvert(string s) {
     return n;
 }
 
+static string
+upcase(const string & s) {
+    string ret;
+    transform(begin(s), end(s), back_inserter(ret),
+        [](const char c) {
+            return ::toupper(c);
+        });
+    return ret;
+}
 
 int
 main(int argc, char ** argv) {
@@ -97,13 +106,15 @@ main(int argc, char ** argv) {
                 cout << rn << endl;
             } catch(invalid_argument & ia) {
                 cerr << ia.what() << endl;
+                exit(1);
             }
         };
         auto fromRoman = [](string s) {
             try {
-                cout << unconvert(expand(s)) << endl;
+                cout << unconvert(expand(upcase(s))) << endl;
             } catch(invalid_argument & ia) {
                 cerr << ia.what() << endl;
+                exit(1);
             }
         };
         auto test = [](string s) {
@@ -112,14 +123,17 @@ main(int argc, char ** argv) {
                 cout << s << "->" << rn << "->" << unconvert(expand(rn)) << endl;
             } catch(invalid_argument & ia) {
                 cerr << ia.what() << endl;
+                exit(1);
             }
         };
         function<void(string)> action = toRoman;
 
         // pass -t as the first arg to show conversion and unconversion
         if ("-t"s == *argv) {
+            argv++; argc--;
             action = test;
         } else if ("-u"s == *argv) {
+            argv++; argc--;
             // unconvert: Roman Numberal to Arabic
             action = fromRoman;
         }
