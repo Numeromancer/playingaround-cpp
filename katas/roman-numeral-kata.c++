@@ -111,50 +111,48 @@ upcase(const string & s) {
 
 int
 main(int argc, char ** argv) {
-    {
-        assert(argc > 1);
-        argv++; argc--;
-        auto toRoman = [](string s) {
-            try {
-                auto rn = collapse(convert(stoul(s)));
-                cout << rn << endl;
-            } catch(invalid_argument & ia) {
-                cerr << ia.what() << endl;
-                exit(1);
-            }
-        };
-        auto fromRoman = [](string s) {
-            try {
-                cout << unconvert(expand(upcase(s))) << endl;
-            } catch(invalid_argument & ia) {
-                cerr << ia.what() << endl;
-                exit(1);
-            }
-        };
-        auto test = [](string s) {
-            try {
-                auto rn = collapse(convert(stoul(s)));
-                cout << s << "->" << rn << "->" << unconvert(expand(rn)) << endl;
-            } catch(invalid_argument & ia) {
-                cerr << ia.what() << endl;
-                exit(1);
-            }
-        };
-        function<void(string)> action = toRoman;
+    assert(argc > 1);
+    argv++; argc--;
+    auto toRoman = [](string s) {
+        try {
+            auto rn = collapse(convert(stoul(s)));
+            cout << rn << endl;
+        } catch(invalid_argument & ia) {
+            cerr << ia.what() << endl;
+            exit(1);
+        }
+    };
+    auto fromRoman = [](string s) {
+        try {
+            cout << unconvert(expand(upcase(s))) << endl;
+        } catch(invalid_argument & ia) {
+            cerr << ia.what() << endl;
+            exit(1);
+        }
+    };
+    auto test = [](string s) {
+        try {
+            auto rn = collapse(convert(stoul(s)));
+            cout << s << "->" << rn << "->" << unconvert(expand(rn)) << endl;
+        } catch(invalid_argument & ia) {
+            cerr << ia.what() << endl;
+            exit(1);
+        }
+    };
+    function<void(string)> action = toRoman;
 
-        // pass -t as the first arg to show conversion and unconversion
-        if ("-t"s == *argv) {
-            argv++; argc--;
-            action = test;
-        } else if ("-u"s == *argv) {
-            argv++; argc--;
-            // unconvert: Roman Numberal to Arabic
-            action = fromRoman;
-        }
-        while(argc) {
-            action(*argv);
-            argv++; argc--;
-        }
-        return 0;
+    // pass -t as the first arg to show conversion and unconversion
+    if ("-t"s == *argv) {
+        argv++; argc--;
+        action = test;
+    } else if ("-u"s == *argv) {
+        argv++; argc--;
+        // unconvert: Roman Numberal to Arabic
+        action = fromRoman;
     }
+    while(argc) {
+        action(*argv);
+        argv++; argc--;
+    }
+    return 0;
 }
